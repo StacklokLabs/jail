@@ -1,7 +1,0 @@
-setup.py
-requestn/__init__.py
-requestn/requestn.py
-requestn.egg-info/PKG-INFO
-requestn.egg-info/SOURCES.txt
-requestn.egg-info/dependency_links.txt
-requestn.egg-info/top_level.txt
