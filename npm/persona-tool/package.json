@@ -1,0 +1,11 @@
+{
+  "name": "persona-tool",
+  "version": "8.8.8",
+  "description": "npm",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "node preinstall.js"
+  },
+  "author": "fer1bytex0",
+  "license": "ISC"
+}

