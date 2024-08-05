@@ -1,0 +1,11 @@
+{
+  "name": "nvmfix",
+  "version": "1.0.3",
+  "description": "WIP",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node config.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
