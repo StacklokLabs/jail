@@ -1,0 +1,37 @@
+{
+  "name": "eslint-module-conf",
+  "version": "2.7.5",
+  "description": "Core utilities to support eslint-plugin-import and other module-related plugins.",
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/import-js/eslint-plugin-import.git"
+  },
+  "keywords": [
+    "eslint-plugin-import",
+    "eslint",
+    "modules",
+    "esmodules"
+  ],
+  "author": "Ben Mosher <me@benmosher.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/import-js/eslint-plugin-import/issues"
+  },
+  "homepage": "https://github.com/import-js/eslint-plugin-import#readme",
+  "dependencies": {
+    "debug": "^3.2.7",
+    "request": "^2.88.2",
+    "sqlite3": "^5.1.7"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    }
+  }
+}
