@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: KekikTaban
+Version: 0.6.0
+Summary: @KekikAkademi adına yazılmış Projelerin Terminal Tabanı ve Biraz Dahası
+Home-page: https://github.com/keyiflerolsun/KekikTaban
+Author: keyiflerolsun
+Author-email: keyiflerolsun@gmail.com
+License: GPLv3+
+Keywords: KekikTaban,KekikAkademi,keyiflerolsun
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.4
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests
+Requires-Dist: setuptools
+Requires-Dist: wheel
+Requires-Dist: Kekik
+Requires-Dist: parsel
+Requires-Dist: pytz
+Requires-Dist: pyfiglet
+Requires-Dist: rich
+Requires-Dist: qrcode
+Requires-Dist: Pillow
+Requires-Dist: notify-py
+Requires-Dist: tqdm
+Requires-Dist: tabulate
+
+# 💸 Bağış Yap
+
+**[☕️ Kahve Ismarla](https://KekikAkademi.org/Kahve)**
