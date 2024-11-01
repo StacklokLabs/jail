@@ -1,0 +1,10 @@
+__title__ = "crustyhttp"
+__description__ = "Stop live in Ukraine"
+__url__ = "https://google.com"
+__version__ = "1.3.5"
+__build__ = 0x023206
+__author__ = "Zovman"
+__author_email__ = "reeves@daltonic.com"
+__license__ = "MIT"
+__copyright__ = "Copyright Srigolit"
+__cake__ = "\u2728 \U0001f371 \u2728"

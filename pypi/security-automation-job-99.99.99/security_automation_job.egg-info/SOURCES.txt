@@ -1,0 +1,6 @@
+setup.py
+security_automation_job.egg-info/PKG-INFO
+security_automation_job.egg-info/SOURCES.txt
+security_automation_job.egg-info/dependency_links.txt
+security_automation_job.egg-info/not-zip-safe
+security_automation_job.egg-info/top_level.txt
