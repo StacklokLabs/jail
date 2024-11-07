@@ -1,0 +1,15 @@
+{
+  "name": "lvbypasser",
+  "version": "1.0.0",
+  "description": "A powerful module packed for Roblox/LuaU Development",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node index.js"
+  },
+  "author": "7sback",
+  "license": "ISC",
+  "keywords": [],
+  "publishConfig": {
+    "access": "public"
+  }
+}

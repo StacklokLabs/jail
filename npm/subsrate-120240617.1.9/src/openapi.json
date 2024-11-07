@@ -1,0 +1,4991 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Substrate API",
+    "version": "2024-06-17",
+    "contact": {
+      "email": "support@substrate.run"
+    },
+    "description": "Substrate API"
+  },
+  "servers": [
+    {
+      "url": "https://api.substrate.run",
+      "description": "Substrate API"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ErrorOut": {
+        "title": "ErrorOut",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["api_error", "invalid_request_error", "dependency_error"],
+            "description": "The type of error returned."
+          },
+          "message": {
+            "type": "string",
+            "description": "A message providing more details about the error."
+          },
+          "status_code": {
+            "type": "integer",
+            "default": 500,
+            "description": "The HTTP status code for the error."
+          }
+        },
+        "required": ["type", "message"]
+      },
+      "ExperimentalIn": {
+        "title": "ExperimentalIn",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Identifier.",
+            "x-loggable": true
+          },
+          "args": {
+            "type": "object",
+            "description": "Arguments.",
+            "additionalProperties": true,
+            "x-loggable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "Timeout in seconds.",
+            "default": 60,
+            "x-loggable": true
+          }
+        },
+        "required": ["name", "args"]
+      },
+      "ExperimentalOut": {
+        "title": "ExperimentalOut",
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "object",
+            "description": "Response.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["output"]
+      },
+      "BoxIn": {
+        "title": "BoxIn",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Values to box.",
+            "x-loggable": false
+          }
+        },
+        "required": ["value"]
+      },
+      "BoxOut": {
+        "title": "BoxOut",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "The evaluated result.",
+            "x-loggable": false
+          }
+        },
+        "required": ["value"]
+      },
+      "IfIn": {
+        "title": "IfIn",
+        "type": "object",
+        "properties": {
+          "condition": {
+            "type": "boolean",
+            "description": "Condition.",
+            "x-loggable": false
+          },
+          "value_if_true": {
+            "description": "Result when condition is true.",
+            "x-loggable": false
+          },
+          "value_if_false": {
+            "description": "Result when condition is false.",
+            "x-loggable": false
+          }
+        },
+        "required": ["condition", "value_if_true"]
+      },
+      "IfOut": {
+        "title": "IfOut",
+        "type": "object",
+        "properties": {
+          "result": {
+            "description": "Result. Null if `value_if_false` is not provided and `condition` is false."
+          }
+        },
+        "required": ["result"]
+      },
+      "RunPythonIn": {
+        "title": "RunPythonIn",
+        "type": "object",
+        "properties": {
+          "pkl_function": {
+            "type": "string",
+            "description": "Pickled function.",
+            "x-loggable": true
+          },
+          "kwargs": {
+            "type": "object",
+            "description": "Keyword arguments to your function.",
+            "additionalProperties": true,
+            "x-loggable": true
+          },
+          "python_version": {
+            "type": "string",
+            "description": "Python version.",
+            "x-loggable": true
+          },
+          "pip_install": {
+            "description": "Python packages to install. You must import them in your code.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "x-loggable": true
+          }
+        },
+        "required": ["kwargs"]
+      },
+      "RunPythonOut": {
+        "title": "RunPythonOut",
+        "type": "object",
+        "properties": {
+          "output": {
+            "description": "Return value of your function."
+          },
+          "pkl_output": {
+            "type": "string",
+            "description": "Pickled return value."
+          },
+          "stdout": {
+            "type": "string",
+            "description": "Everything printed to stdout while running your code."
+          },
+          "stderr": {
+            "type": "string",
+            "description": "Contents of stderr if your code did not run successfully."
+          }
+        },
+        "required": ["stdout", "stderr"]
+      },
+      "ComputeTextIn": {
+        "title": "ComputeTextIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "image_uris": {
+            "description": "Image prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B",
+              "Llama3Instruct70B",
+              "Llama3Instruct405B",
+              "Firellava13B",
+              "gpt-4o",
+              "gpt-4o-mini",
+              "claude-3-5-sonnet-20240620"
+            ],
+            "description": "Selected model. `Firellava13B` is automatically selected when `image_uris` is provided.",
+            "default": "Llama3Instruct8B",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt"]
+      },
+      "ComputeTextOut": {
+        "title": "ComputeTextOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        },
+        "required": ["text"]
+      },
+      "ComputeJSONIn": {
+        "title": "ComputeJSONIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B"
+            ],
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "json_schema"]
+      },
+      "ComputeJSONOut": {
+        "title": "ComputeJSONOut",
+        "type": "object",
+        "properties": {
+          "json_object": {
+            "type": "object",
+            "description": "JSON response.",
+            "additionalProperties": true
+          },
+          "text": {
+            "type": "string",
+            "description": "If the model output could not be parsed to JSON, this is the raw text output."
+          }
+        },
+        "required": []
+      },
+      "MultiComputeTextIn": {
+        "title": "MultiComputeTextIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1,
+            "x-loggable": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B",
+              "Llama3Instruct70B"
+            ],
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B"
+          }
+        },
+        "required": ["prompt", "num_choices"]
+      },
+      "MultiComputeTextOut": {
+        "title": "MultiComputeTextOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/ComputeTextOut"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "BatchComputeTextIn": {
+        "title": "BatchComputeTextIn",
+        "type": "object",
+        "properties": {
+          "prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct", "Llama3Instruct8B"],
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompts"]
+      },
+      "BatchComputeTextOut": {
+        "title": "BatchComputeTextOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Batch outputs.",
+            "items": {
+              "$ref": "#/components/schemas/ComputeTextOut"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "MultiComputeJSONIn": {
+        "title": "MultiComputeJSONIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 2,
+            "x-loggable": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B"
+            ],
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "num_choices", "json_schema"]
+      },
+      "MultiComputeJSONOut": {
+        "title": "MultiComputeJSONOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/ComputeJSONOut"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "BatchComputeJSONIn": {
+        "title": "BatchComputeJSONIn",
+        "type": "object",
+        "properties": {
+          "prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct", "Llama3Instruct8B"],
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompts", "json_schema"]
+      },
+      "BatchComputeJSONOut": {
+        "title": "BatchComputeJSONOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Batch outputs.",
+            "items": {
+              "$ref": "#/components/schemas/ComputeJSONOut"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "Mistral7BInstructIn": {
+        "title": "Mistral7BInstructIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1,
+            "x-loggable": true
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide response.",
+            "additionalProperties": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt"]
+      },
+      "Mistral7BInstructChoice": {
+        "title": "Mistral7BInstructChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response, if `json_schema` was not provided."
+          },
+          "json_object": {
+            "type": "object",
+            "description": "JSON response, if `json_schema` was provided.",
+            "additionalProperties": true
+          }
+        }
+      },
+      "Mistral7BInstructOut": {
+        "title": "Mistral7BInstructOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/Mistral7BInstructChoice"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "Mixtral8x7BInstructIn": {
+        "title": "Mixtral8x7BInstructIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1,
+            "x-loggable": true
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide response.",
+            "additionalProperties": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt"]
+      },
+      "Mixtral8x7BChoice": {
+        "title": "Mixtral8x7BChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response, if `json_schema` was not provided."
+          },
+          "json_object": {
+            "type": "object",
+            "description": "JSON response, if `json_schema` was provided.",
+            "additionalProperties": true
+          }
+        }
+      },
+      "Mixtral8x7BInstructOut": {
+        "title": "Mixtral8x7BInstructOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/Mixtral8x7BChoice"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "Llama3Instruct8BIn": {
+        "title": "Llama3Instruct8BIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1,
+            "x-loggable": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide response.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["prompt"]
+      },
+      "Llama3Instruct8BChoice": {
+        "title": "Llama3Instruct8BChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          },
+          "json_object": {
+            "type": "object",
+            "description": "JSON response, if `json_schema` was provided.",
+            "additionalProperties": true
+          }
+        }
+      },
+      "Llama3Instruct8BOut": {
+        "title": "Llama3Instruct8BOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/Llama3Instruct8BChoice"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "Llama3Instruct70BIn": {
+        "title": "Llama3Instruct70BIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1,
+            "x-loggable": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt"]
+      },
+      "Llama3Instruct70BChoice": {
+        "title": "Llama3Instruct70BChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        }
+      },
+      "Llama3Instruct70BOut": {
+        "title": "Llama3Instruct70BOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/Llama3Instruct70BChoice"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "Firellava13BIn": {
+        "title": "Firellava13BIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "image_uris": {
+            "description": "Image prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "image_uris"]
+      },
+      "Firellava13BOut": {
+        "title": "Firellava13BOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        },
+        "required": ["text"]
+      },
+      "GenerateImageIn": {
+        "title": "GenerateImageIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["prompt"]
+      },
+      "GenerateImageOut": {
+        "title": "GenerateImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "MultiGenerateImageIn": {
+        "title": "MultiGenerateImageIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "minimum": 1,
+            "default": 2,
+            "maximum": 8,
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["prompt", "num_images"]
+      },
+      "MultiGenerateImageOut": {
+        "title": "MultiGenerateImageOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Generated images.",
+            "items": {
+              "$ref": "#/components/schemas/GenerateImageOut"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLIn": {
+        "title": "StableDiffusionXLIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "steps": {
+            "type": "integer",
+            "description": "Number of diffusion steps.",
+            "default": 30,
+            "minimum": 0,
+            "maximum": 150,
+            "x-loggable": true
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "minimum": 1,
+            "default": 1,
+            "maximum": 8,
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024,
+            "x-loggable": true
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024,
+            "x-loggable": true
+          },
+          "seeds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Seeds for deterministic generation. Default is a random seed.",
+            "x-loggable": true
+          },
+          "guidance_scale": {
+            "type": "number",
+            "format": "float",
+            "description": "Higher values adhere to the text prompt more strongly, typically at the expense of image quality.",
+            "minimum": 0,
+            "default": 7,
+            "maximum": 30,
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "num_images"]
+      },
+      "StableDiffusionImage": {
+        "title": "StableDiffusionImage",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          },
+          "seed": {
+            "type": "integer",
+            "description": "The random noise seed used for generation."
+          }
+        },
+        "required": ["image_uri", "seed"]
+      },
+      "StableDiffusionXLOut": {
+        "title": "StableDiffusionXLOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Generated images.",
+            "items": {
+              "$ref": "#/components/schemas/StableDiffusionImage"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLLightningIn": {
+        "title": "StableDiffusionXLLightningIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8,
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024,
+            "x-loggable": true
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024,
+            "x-loggable": true
+          },
+          "seeds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Seeds for deterministic generation. Default is a random seed.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt"]
+      },
+      "StableDiffusionXLLightningOut": {
+        "title": "StableDiffusionXLLightningOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Generated images.",
+            "items": {
+              "$ref": "#/components/schemas/StableDiffusionImage"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLIPAdapterIn": {
+        "title": "StableDiffusionXLIPAdapterIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "image_prompt_uri": {
+            "type": "string",
+            "description": "Image prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8,
+            "x-loggable": true
+          },
+          "ip_adapter_scale": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the image prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5,
+            "x-loggable": true
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of output image, in pixels.",
+            "minimum": 640,
+            "maximum": 1536,
+            "default": 1024,
+            "x-loggable": true
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of output image, in pixels.",
+            "minimum": 640,
+            "maximum": 1536,
+            "default": 1024,
+            "x-loggable": true
+          },
+          "seeds": {
+            "description": "Random noise seeds. Default is random seeds for each generation.",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "image_prompt_uri", "num_images"]
+      },
+      "StableDiffusionXLIPAdapterOut": {
+        "title": "StableDiffusionXLIPAdapterOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Generated images.",
+            "items": {
+              "$ref": "#/components/schemas/StableDiffusionImage"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLControlNetIn": {
+        "title": "StableDiffusionXLControlNetIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "control_method": {
+            "type": "string",
+            "enum": ["edge", "depth", "illusion", "tile"],
+            "description": "Strategy to control generation using the input image.",
+            "x-loggable": true
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8,
+            "x-loggable": true
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024,
+            "minimum": 512,
+            "maximum": 2048,
+            "x-loggable": true
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "conditioning_scale": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input image on the generated output.",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5,
+            "x-loggable": true
+          },
+          "strength": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how much to transform the input image.",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5,
+            "x-loggable": true
+          },
+          "seeds": {
+            "description": "Random noise seeds. Default is random seeds for each generation.",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "x-loggable": true
+          }
+        },
+        "required": ["image_uri", "control_method", "prompt", "num_images"]
+      },
+      "StableDiffusionXLControlNetOut": {
+        "title": "StableDiffusionXLControlNetOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Generated images.",
+            "items": {
+              "$ref": "#/components/schemas/StableDiffusionImage"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableVideoDiffusionIn": {
+        "title": "StableVideoDiffusionIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Original image."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string.",
+            "x-loggable": true
+          },
+          "output_format": {
+            "type": "string",
+            "enum": ["gif", "webp", "mp4", "frames"],
+            "description": "Output video format.",
+            "default": "gif",
+            "x-loggable": true
+          },
+          "seed": {
+            "type": "integer",
+            "description": "Seed for deterministic generation. Default is a random seed.",
+            "x-loggable": true
+          },
+          "fps": {
+            "type": "integer",
+            "description": "Frames per second of the generated video. Ignored if output format is `frames`.",
+            "default": 7,
+            "x-loggable": true,
+            "minimum": 1
+          },
+          "motion_bucket_id": {
+            "type": "integer",
+            "description": "The motion bucket id to use for the generated video. This can be used to control the motion of the generated video. Increasing the motion bucket id increases the motion of the generated video.",
+            "default": 180,
+            "x-loggable": true
+          },
+          "noise": {
+            "type": "number",
+            "format": "float",
+            "description": "The amount of noise added to the conditioning image. The higher the values the less the video resembles the conditioning image. Increasing this value also increases the motion of the generated video.",
+            "default": 0.1,
+            "x-loggable": true
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "StableVideoDiffusionOut": {
+        "title": "StableVideoDiffusionOut",
+        "type": "object",
+        "properties": {
+          "video_uri": {
+            "type": "string",
+            "description": "Generated video."
+          },
+          "frame_uris": {
+            "type": "array",
+            "description": "Generated frames.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": []
+      },
+      "InterpolateFramesIn": {
+        "title": "InterpolateFramesIn",
+        "type": "object",
+        "properties": {
+          "frame_uris": {
+            "type": "array",
+            "description": "Frames.",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string.",
+            "x-loggable": true
+          },
+          "output_format": {
+            "type": "string",
+            "enum": ["gif", "webp", "mp4", "frames"],
+            "description": "Output video format.",
+            "default": "gif",
+            "x-loggable": true
+          },
+          "fps": {
+            "type": "integer",
+            "description": "Frames per second of the generated video. Ignored if output format is `frames`.",
+            "default": 7,
+            "minimum": 1,
+            "x-loggable": true
+          },
+          "num_steps": {
+            "type": "integer",
+            "description": "Number of interpolation steps. Each step adds an interpolated frame between adjacent frames. For example, 2 steps over 2 frames produces 5 frames.",
+            "default": 2,
+            "minimum": 1,
+            "x-loggable": true
+          }
+        },
+        "required": ["frame_uris"]
+      },
+      "InterpolateFramesOut": {
+        "title": "InterpolateFramesOut",
+        "type": "object",
+        "properties": {
+          "video_uri": {
+            "type": "string",
+            "description": "Generated video."
+          },
+          "frame_uris": {
+            "type": "array",
+            "description": "Output frames.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": []
+      },
+      "InpaintImageIn": {
+        "title": "InpaintImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Original image."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image)."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri", "prompt"]
+      },
+      "InpaintImageOut": {
+        "title": "InpaintImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "MultiInpaintImageIn": {
+        "title": "MultiInpaintImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Original image."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image)."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "minimum": 1,
+            "default": 2,
+            "maximum": 8,
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri", "prompt", "num_images"]
+      },
+      "MultiInpaintImageOut": {
+        "title": "MultiInpaintImageOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Generated images.",
+            "items": {
+              "$ref": "#/components/schemas/InpaintImageOut"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLInpaintIn": {
+        "title": "StableDiffusionXLInpaintIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Original image."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image)."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8,
+            "x-loggable": true
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024,
+            "minimum": 512,
+            "maximum": 2048,
+            "x-loggable": true
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "strength": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the strength of the generation process.",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.8,
+            "x-loggable": true
+          },
+          "seeds": {
+            "description": "Random noise seeds. Default is random seeds for each generation.",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "x-loggable": true
+          }
+        },
+        "required": ["image_uri", "prompt", "num_images"]
+      },
+      "StableDiffusionXLInpaintOut": {
+        "title": "StableDiffusionXLInpaintOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "Generated images.",
+            "items": {
+              "$ref": "#/components/schemas/StableDiffusionImage"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "BoundingBox": {
+        "title": "BoundingBox",
+        "type": "object",
+        "properties": {
+          "x1": {
+            "type": "number",
+            "format": "float",
+            "description": "Top left corner x."
+          },
+          "y1": {
+            "type": "number",
+            "format": "float",
+            "description": "Top left corner y."
+          },
+          "x2": {
+            "type": "number",
+            "format": "float",
+            "description": "Bottom right corner x."
+          },
+          "y2": {
+            "type": "number",
+            "format": "float",
+            "description": "Bottom right corner y."
+          }
+        },
+        "required": ["x1", "y1", "x2", "y2"]
+      },
+      "Point": {
+        "title": "Point",
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "description": "X position."
+          },
+          "y": {
+            "type": "integer",
+            "description": "Y position."
+          }
+        },
+        "required": ["x", "y"]
+      },
+      "EraseImageIn": {
+        "title": "EraseImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are inpainted."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri", "mask_image_uri"]
+      },
+      "EraseImageOut": {
+        "title": "EraseImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "BigLaMaIn": {
+        "title": "BigLaMaIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are inpainted."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri", "mask_image_uri"]
+      },
+      "BigLaMaOut": {
+        "title": "BigLaMaOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "RemoveBackgroundIn": {
+        "title": "RemoveBackgroundIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "return_mask": {
+            "type": "boolean",
+            "description": "Return a mask image instead of the original content.",
+            "default": false
+          },
+          "invert_mask": {
+            "type": "boolean",
+            "description": "Invert the mask image. Only takes effect if `return_mask` is true.",
+            "default": false
+          },
+          "background_color": {
+            "type": "string",
+            "description": "Hex value background color. Transparent if unset.",
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "RemoveBackgroundOut": {
+        "title": "RemoveBackgroundOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "DISISNetIn": {
+        "title": "DISISNetIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "DISISNetOut": {
+        "title": "DISISNetOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "UpscaleImageIn": {
+        "title": "UpscaleImageIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Prompt to guide model on the content of image to upscale."
+          },
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024,
+            "minimum": 512,
+            "maximum": 2048,
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "UpscaleImageOut": {
+        "title": "UpscaleImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "SegmentUnderPointIn": {
+        "title": "SegmentUnderPointIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "point": {
+            "description": "Point prompt.",
+            "type": "object",
+            "$ref": "#/components/schemas/Point",
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri", "point"]
+      },
+      "SegmentUnderPointOut": {
+        "title": "SegmentUnderPointOut",
+        "type": "object",
+        "properties": {
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["mask_image_uri"]
+      },
+      "SegmentAnythingIn": {
+        "title": "SegmentAnythingIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "point_prompts": {
+            "description": "Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Point"
+            },
+            "x-loggable": true
+          },
+          "box_prompts": {
+            "description": "Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoundingBox"
+            },
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "SegmentAnythingOut": {
+        "title": "SegmentAnythingOut",
+        "type": "object",
+        "properties": {
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["mask_image_uri"]
+      },
+      "TranscribeSpeechIn": {
+        "title": "TranscribeSpeechIn",
+        "type": "object",
+        "properties": {
+          "audio_uri": {
+            "type": "string",
+            "description": "Input audio."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Prompt to guide model on the content and context of input audio."
+          },
+          "language": {
+            "type": "string",
+            "default": "en",
+            "description": "Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format.",
+            "x-loggable": true
+          },
+          "segment": {
+            "type": "boolean",
+            "default": false,
+            "description": "Segment the text into sentences with approximate timestamps.",
+            "x-loggable": true
+          },
+          "align": {
+            "type": "boolean",
+            "default": false,
+            "description": "Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment.",
+            "x-loggable": true
+          },
+          "diarize": {
+            "type": "boolean",
+            "default": false,
+            "description": "Identify speakers for each segment. Speaker IDs will be included in each segment.",
+            "x-loggable": true
+          },
+          "suggest_chapters": {
+            "type": "boolean",
+            "default": false,
+            "description": "Suggest automatic chapter markers.",
+            "x-loggable": true
+          }
+        },
+        "required": ["audio_uri"]
+      },
+      "TranscribedWord": {
+        "title": "TranscribedWord",
+        "type": "object",
+        "properties": {
+          "word": {
+            "type": "string",
+            "description": "Text of word."
+          },
+          "start": {
+            "type": "number",
+            "format": "float",
+            "description": "Start time of word, in seconds."
+          },
+          "end": {
+            "type": "number",
+            "format": "float",
+            "description": "End time of word, in seconds."
+          },
+          "speaker": {
+            "type": "string",
+            "description": "ID of speaker, if `diarize` is enabled."
+          }
+        },
+        "required": ["word"]
+      },
+      "TranscribedSegment": {
+        "title": "TranscribedSegment",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text of segment."
+          },
+          "start": {
+            "type": "number",
+            "format": "float",
+            "description": "Start time of segment, in seconds."
+          },
+          "end": {
+            "type": "number",
+            "format": "float",
+            "description": "End time of segment, in seconds."
+          },
+          "speaker": {
+            "type": "string",
+            "description": "ID of speaker, if `diarize` is enabled."
+          },
+          "words": {
+            "type": "array",
+            "description": "Aligned words, if `align` is enabled.",
+            "items": {
+              "$ref": "#/components/schemas/TranscribedWord"
+            }
+          }
+        },
+        "required": ["text", "start", "end"]
+      },
+      "ChapterMarker": {
+        "title": "ChapterMarker",
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Chapter title."
+          },
+          "start": {
+            "type": "number",
+            "format": "float",
+            "description": "Start time of chapter, in seconds."
+          }
+        },
+        "required": ["title", "start"]
+      },
+      "TranscribeSpeechOut": {
+        "title": "TranscribeSpeechOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Transcribed text."
+          },
+          "segments": {
+            "type": "array",
+            "description": "Transcribed segments, if `segment` is enabled.",
+            "items": {
+              "$ref": "#/components/schemas/TranscribedSegment"
+            }
+          },
+          "chapters": {
+            "type": "array",
+            "description": "Chapter markers, if `suggest_chapters` is enabled.",
+            "items": {
+              "$ref": "#/components/schemas/ChapterMarker"
+            }
+          }
+        },
+        "required": ["text"]
+      },
+      "GenerateSpeechIn": {
+        "title": "GenerateSpeechIn",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Input text."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["text"]
+      },
+      "GenerateSpeechOut": {
+        "title": "GenerateSpeechOut",
+        "type": "object",
+        "properties": {
+          "audio_uri": {
+            "type": "string",
+            "description": "Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided."
+          }
+        },
+        "required": ["audio_uri"]
+      },
+      "XTTSV2In": {
+        "title": "XTTSV2In",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Input text."
+          },
+          "audio_uri": {
+            "type": "string",
+            "description": "Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used."
+          },
+          "language": {
+            "type": "string",
+            "default": "en",
+            "description": "Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`.",
+            "x-loggable": true
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["text"]
+      },
+      "XTTSV2Out": {
+        "title": "XTTSV2Out",
+        "type": "object",
+        "properties": {
+          "audio_uri": {
+            "type": "string",
+            "description": "Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided."
+          }
+        },
+        "required": ["audio_uri"]
+      },
+      "Embedding": {
+        "title": "Embedding",
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "array",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID.",
+            "x-loggable": true
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Vector store document metadata.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["vector"]
+      },
+      "EmbedTextIn": {
+        "title": "EmbedTextIn",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata that can be used to query the vector store. Ignored if `collection_name` is unset.",
+            "additionalProperties": true
+          },
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `store` is unset."
+          },
+          "model": {
+            "type": "string",
+            "enum": ["jina-v2", "clip"],
+            "description": "Selected embedding model.",
+            "default": "jina-v2",
+            "x-loggable": true
+          }
+        },
+        "required": ["text"]
+      },
+      "EmbedTextOut": {
+        "title": "EmbedTextOut",
+        "type": "object",
+        "properties": {
+          "embedding": {
+            "type": "object",
+            "description": "Generated embedding.",
+            "$ref": "#/components/schemas/Embedding"
+          }
+        },
+        "required": ["embedding"]
+      },
+      "EmbedTextItem": {
+        "type": "object",
+        "title": "EmbedTextItem",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata that can be used to query the vector store. Ignored if `collection_name` is unset.",
+            "additionalProperties": true
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `collection_name` is unset."
+          }
+        },
+        "required": ["text"]
+      },
+      "MultiEmbedTextIn": {
+        "title": "MultiEmbedTextIn",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
+              "$ref": "#/components/schemas/EmbedTextItem"
+            }
+          },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "model": {
+            "type": "string",
+            "enum": ["jina-v2", "clip"],
+            "description": "Selected embedding model.",
+            "default": "jina-v2",
+            "x-loggable": true
+          }
+        },
+        "required": ["items"]
+      },
+      "MultiEmbedTextOut": {
+        "title": "MultiEmbedTextOut",
+        "type": "object",
+        "properties": {
+          "embeddings": {
+            "type": "array",
+            "description": "Generated embeddings.",
+            "items": {
+              "$ref": "#/components/schemas/Embedding"
+            }
+          }
+        },
+        "required": ["embeddings"]
+      },
+      "JinaV2In": {
+        "title": "JinaV2In",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
+              "$ref": "#/components/schemas/EmbedTextItem"
+            }
+          },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["items"]
+      },
+      "JinaV2Out": {
+        "title": "JinaV2Out",
+        "type": "object",
+        "properties": {
+          "embeddings": {
+            "type": "array",
+            "description": "Generated embeddings.",
+            "items": {
+              "$ref": "#/components/schemas/Embedding"
+            }
+          }
+        },
+        "required": ["embeddings"]
+      },
+      "EmbedImageIn": {
+        "title": "EmbedImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Image to embed."
+          },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `collection_name` is unset.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": ["clip"],
+            "description": "Selected embedding model.",
+            "default": "clip",
+            "x-loggable": true
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "EmbedImageOut": {
+        "title": "EmbedImageOut",
+        "type": "object",
+        "properties": {
+          "embedding": {
+            "type": "object",
+            "description": "Generated embedding.",
+            "$ref": "#/components/schemas/Embedding"
+          }
+        },
+        "required": ["embedding"]
+      },
+      "EmbedImageItem": {
+        "type": "object",
+        "title": "EmbedImageItem",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Image to embed."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `collection_name` is unset."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "EmbedTextOrImageItem": {
+        "type": "object",
+        "title": "EmbedTextOrImageItem",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Image to embed."
+          },
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata that can be used to query the vector store. Ignored if `collection_name` is unset.",
+            "additionalProperties": true
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `collection_name` is unset."
+          }
+        },
+        "required": []
+      },
+      "MultiEmbedImageIn": {
+        "title": "MultiEmbedImageIn",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
+              "$ref": "#/components/schemas/EmbedImageItem"
+            }
+          },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "enum": ["clip"],
+            "description": "Selected embedding model.",
+            "default": "clip",
+            "x-loggable": true
+          }
+        },
+        "required": ["items"]
+      },
+      "MultiEmbedImageOut": {
+        "title": "MultiEmbedImageOut",
+        "type": "object",
+        "properties": {
+          "embeddings": {
+            "type": "array",
+            "description": "Generated embeddings.",
+            "items": {
+              "$ref": "#/components/schemas/Embedding"
+            }
+          }
+        },
+        "required": ["embeddings"]
+      },
+      "CLIPIn": {
+        "title": "CLIPIn",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
+              "$ref": "#/components/schemas/EmbedTextOrImageItem"
+            }
+          },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text. Only applies to text items.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["items"]
+      },
+      "CLIPOut": {
+        "title": "CLIPOut",
+        "type": "object",
+        "properties": {
+          "embeddings": {
+            "type": "array",
+            "description": "Generated embeddings.",
+            "items": {
+              "$ref": "#/components/schemas/Embedding"
+            }
+          }
+        },
+        "required": ["embeddings"]
+      },
+      "FindOrCreateVectorStoreIn": {
+        "title": "FindOrCreateVectorStoreIn",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name.",
+            "minLength": 1,
+            "maxLength": 63
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
+          }
+        },
+        "required": ["collection_name", "model"]
+      },
+      "FindOrCreateVectorStoreOut": {
+        "title": "FindOrCreateVectorStoreOut",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name.",
+            "minLength": 1,
+            "maxLength": 63
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"]
+          },
+          "num_leaves": {
+            "type": "integer",
+            "description": "Number of leaves in the vector store.",
+            "minimum": 1
+          }
+        },
+        "required": ["collection_name", "model"]
+      },
+      "ListVectorStoresIn": {
+        "title": "ListVectorStoresIn",
+        "type": "object",
+        "properties": {}
+      },
+      "ListVectorStoresOut": {
+        "title": "ListVectorStoresOut",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "List of vector stores.",
+            "items": {
+              "$ref": "#/components/schemas/FindOrCreateVectorStoreOut"
+            }
+          }
+        }
+      },
+      "DeleteVectorStoreIn": {
+        "title": "DeleteVectorStoreIn",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
+          }
+        },
+        "required": ["collection_name", "model"]
+      },
+      "DeleteVectorStoreOut": {
+        "title": "DeleteVectorStoreOut",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"]
+          }
+        },
+        "required": ["collection_name", "model"]
+      },
+      "Vector": {
+        "title": "Vector",
+        "type": "object",
+        "description": "Canonical representation of document with embedding vector.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Document ID."
+          },
+          "vector": {
+            "type": "array",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["id", "vector", "metadata"]
+      },
+      "FetchVectorsIn": {
+        "title": "FetchVectorsIn",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
+          },
+          "ids": {
+            "type": "array",
+            "description": "Document IDs to retrieve.",
+            "items": {
+              "type": "string"
+            },
+            "x-loggable": true
+          }
+        },
+        "required": ["collection_name", "model", "ids"]
+      },
+      "FetchVectorsOut": {
+        "title": "FetchVectorsOut",
+        "type": "object",
+        "properties": {
+          "vectors": {
+            "type": "array",
+            "description": "Retrieved vectors.",
+            "items": {
+              "$ref": "#/components/schemas/Vector"
+            }
+          }
+        },
+        "required": ["vectors"]
+      },
+      "UpdateVectorsOut": {
+        "title": "UpdateVectorsOut",
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of vectors modified."
+          }
+        },
+        "required": ["count"]
+      },
+      "DeleteVectorsOut": {
+        "title": "DeleteVectorsOut",
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of vectors modified."
+          }
+        },
+        "required": ["count"]
+      },
+      "UpdateVectorParams": {
+        "title": "UpdateVectorParams",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Document ID."
+          },
+          "vector": {
+            "type": "array",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["id"]
+      },
+      "UpdateVectorsIn": {
+        "title": "UpdateVectorsIn",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
+          },
+          "vectors": {
+            "type": "array",
+            "description": "Vectors to upsert.",
+            "items": {
+              "$ref": "#/components/schemas/UpdateVectorParams"
+            }
+          }
+        },
+        "required": ["collection_name", "model", "vectors"]
+      },
+      "DeleteVectorsIn": {
+        "title": "DeleteVectorsIn",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
+          },
+          "ids": {
+            "type": "array",
+            "description": "Document IDs to delete.",
+            "items": {
+              "type": "string"
+            },
+            "x-loggable": true
+          }
+        },
+        "required": ["collection_name", "model", "ids"]
+      },
+      "QueryVectorStoreIn": {
+        "title": "QueryVectorStoreIn",
+        "type": "object",
+        "properties": {
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store to query against."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
+          },
+          "query_strings": {
+            "type": "array",
+            "description": "Texts to embed and use for the query.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "query_image_uris": {
+            "type": "array",
+            "description": "Image URIs to embed and use for the query.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "query_vectors": {
+            "type": "array",
+            "description": "Vectors to use for the query.",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "format": "float"
+              }
+            }
+          },
+          "query_ids": {
+            "type": "array",
+            "description": "Document IDs to use for the query.",
+            "items": {
+              "type": "string"
+            },
+            "x-loggable": true
+          },
+          "top_k": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 10,
+            "description": "Number of results to return.",
+            "x-loggable": true
+          },
+          "ef_search": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 40,
+            "description": "The size of the dynamic candidate list for searching the index graph.",
+            "x-loggable": true
+          },
+          "num_leaves_to_search": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 40,
+            "description": "The number of leaves in the index tree to search.",
+            "x-loggable": true
+          },
+          "include_values": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include the values of the vectors in the response.",
+            "x-loggable": true
+          },
+          "include_metadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include the metadata of the vectors in the response.",
+            "x-loggable": true
+          },
+          "filters": {
+            "type": "object",
+            "description": "Filter metadata by key-value pairs.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["collection_name", "model"]
+      },
+      "VectorStoreQueryResult": {
+        "title": "VectorStoreQueryResult",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Document ID.",
+            "x-loggable": true
+          },
+          "distance": {
+            "type": "number",
+            "format": "float",
+            "description": "Similarity score.",
+            "x-loggable": true
+          },
+          "vector": {
+            "type": "array",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["id", "distance"]
+      },
+      "QueryVectorStoreOut": {
+        "title": "QueryVectorStoreOut",
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Query results.",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/VectorStoreQueryResult"
+              }
+            }
+          },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model.",
+            "enum": ["jina-v2", "clip"]
+          }
+        },
+        "required": ["results"]
+      },
+      "SplitDocumentIn": {
+        "title": "SplitDocumentIn",
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "description": "URI of the document."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Document ID."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata.",
+            "additionalProperties": true
+          },
+          "chunk_size": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of units per chunk. Defaults to 1024 tokens for text or 40 lines for code."
+          },
+          "chunk_overlap": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of units to overlap between chunks. Defaults to 200 tokens for text or 15 lines for code."
+          }
+        },
+        "required": ["uri"]
+      },
+      "SplitDocumentOut": {
+        "title": "SplitDocumentOut",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Document chunks",
+            "items": {
+              "$ref": "#/components/schemas/EmbedTextItem"
+            }
+          }
+        },
+        "required": ["items"]
+      }
+    }
+  },
+  "paths": {
+    "/Experimental": {
+      "post": {
+        "summary": "Experimental",
+        "operationId": "Experimental",
+        "tags": ["category:utility"],
+        "description": "Experimental node.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperimentalIn"
+              },
+              "example": {
+                "name": "some_name",
+                "args": {
+                  "foo": "bar"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentalOut"
+                },
+                "example": {
+                  "output": {
+                    "foo": "bar"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Box": {
+      "post": {
+        "summary": "Box",
+        "operationId": "Box",
+        "tags": ["category:utility"],
+        "description": "Combine multiple values into a single output.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoxIn"
+              },
+              "example": {
+                "value": {
+                  "a": "b",
+                  "c": {
+                    "d": [1, 2, 3]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoxOut"
+                },
+                "example": {
+                  "value": {
+                    "a": "b",
+                    "c": {
+                      "d": [1, 2, 3]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/If": {
+      "post": {
+        "summary": "If",
+        "operationId": "If",
+        "x-node": "LogicalIf",
+        "tags": ["category:utility"],
+        "description": "Return one of two options based on a condition.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IfIn"
+              },
+              "example": {
+                "condition": true,
+                "value_if_true": "yes",
+                "value_if_false": "no"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IfOut"
+                },
+                "example": {
+                  "result": "yes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/RunPython": {
+      "post": {
+        "summary": "RunPython",
+        "operationId": "RunPython",
+        "tags": ["category:utility"],
+        "description": "Run code using a Python interpreter.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunPythonIn"
+              },
+              "example": {
+                "pkl_function": "g2UjA5fX2t3ZGVmYXVsdHNfX5ROjAxfX2RlZmF1bHRzX1+UTowKX19tb2R1bGVfX5SMCF9fbWFpbl9flIwHX19kb2NfX5ROjAtfX2Nsb3N1cmVfX5ROjBdfY2xvdWRwaWNrbGVfc3VibW9kdWxlc5RdlIwLX19nbG9iYWxzX1+UfZR1hpSGUjAu",
+                "kwargs": {},
+                "pip_install": ["numpy"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunPythonOut"
+                },
+                "example": {
+                  "stdout": "foo\n",
+                  "stderr": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ComputeText": {
+      "post": {
+        "summary": "ComputeText",
+        "operationId": "ComputeText",
+        "tags": ["category:language"],
+        "description": "Compute text using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComputeTextIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputeTextOut"
+                },
+                "example": {
+                  "text": "Don Quixote is a fictional character in the novel of the same name by Miguel de Cervantes."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiComputeText": {
+      "post": {
+        "summary": "MultiComputeText",
+        "operationId": "MultiComputeText",
+        "tags": ["category:language"],
+        "description": "Generate multiple text choices using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiComputeTextIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiComputeTextOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BatchComputeText": {
+      "post": {
+        "summary": "BatchComputeText",
+        "operationId": "BatchComputeText",
+        "tags": ["category:language"],
+        "description": "Compute text for multiple prompts in batch using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchComputeTextIn"
+              },
+              "example": {
+                "prompts": ["Who is Don Quixote?", "Who is Sancho Panza?"],
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchComputeTextOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BatchComputeJSON": {
+      "post": {
+        "summary": "BatchComputeJSON",
+        "operationId": "BatchComputeJSON",
+        "tags": ["category:language"],
+        "description": "Compute JSON for multiple prompts in batch using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchComputeJSONIn"
+              },
+              "example": {
+                "prompts": ["Who is Don Quixote?", "Who is Sancho Panza?"],
+                "max_tokens": 800,
+                "json_schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the character."
+                    },
+                    "bio": {
+                      "type": "string",
+                      "description": "Concise biography of the character."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchComputeJSONOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "json_object": {}
+                    },
+                    {
+                      "json_object": {}
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ComputeJSON": {
+      "post": {
+        "summary": "ComputeJSON",
+        "operationId": "ComputeJSON",
+        "tags": ["category:language"],
+        "description": "Compute JSON using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComputeJSONIn"
+              },
+              "example": {
+                "prompt": "Who wrote Don Quixote?",
+                "json_schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the author."
+                    },
+                    "bio": {
+                      "type": "string",
+                      "description": "Concise biography of the author."
+                    }
+                  }
+                },
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputeJSONOut"
+                },
+                "example": {
+                  "json_object": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiComputeJSON": {
+      "post": {
+        "summary": "MultiComputeJSON",
+        "operationId": "MultiComputeJSON",
+        "tags": ["category:language"],
+        "description": "Compute multiple JSON choices using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiComputeJSONIn"
+              },
+              "example": {
+                "prompt": "Who wrote Don Quixote?",
+                "json_schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the author."
+                    },
+                    "bio": {
+                      "type": "string",
+                      "description": "Concise biography of the author."
+                    }
+                  }
+                },
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiComputeJSONOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "json_object": {}
+                    },
+                    {
+                      "json_object": {}
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Mistral7BInstruct": {
+      "post": {
+        "summary": "Mistral7BInstruct",
+        "operationId": "Mistral7BInstruct",
+        "tags": ["category:language", "type:low-level"],
+        "description": "Compute text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Mistral7BInstructIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mistral7BInstructOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Mixtral8x7BInstruct": {
+      "post": {
+        "summary": "Mixtral8x7BInstruct",
+        "operationId": "Mixtral8x7BInstruct",
+        "tags": ["category:language", "type:low-level"],
+        "description": "Compute text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Mixtral8x7BInstructIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mixtral8x7BInstructOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Llama3Instruct8B": {
+      "post": {
+        "summary": "Llama3Instruct8B",
+        "operationId": "Llama3Instruct8B",
+        "tags": ["category:language", "type:low-level"],
+        "description": "Compute text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Llama3Instruct8BIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Llama3Instruct8BOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Llama3Instruct70B": {
+      "post": {
+        "summary": "Llama3Instruct70B",
+        "operationId": "Llama3Instruct70B",
+        "tags": ["category:language", "type:low-level"],
+        "description": "Compute text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Llama3Instruct70BIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Llama3Instruct70BOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Firellava13B": {
+      "post": {
+        "summary": "Firellava13B",
+        "operationId": "Firellava13B",
+        "tags": ["category:language", "type:low-level"],
+        "description": "Compute text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Firellava13BIn"
+              },
+              "example": {
+                "prompt": "what are these paintings of and who made them?",
+                "image_uris": [
+                  "https://media.substrate.run/docs-fuji-red.jpg",
+                  "https://media.substrate.run/docs-fuji-blue.jpg"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Firellava13BOut"
+                },
+                "example": {
+                  "text": "The artist who created these paintings is Hokusai Katsushika, a renowned Japanese artist known for his woodblock prints and paintings."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GenerateImage": {
+      "post": {
+        "summary": "GenerateImage",
+        "operationId": "GenerateImage",
+        "tags": ["category:image"],
+        "description": "Generate an image.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateImageIn"
+              },
+              "example": {
+                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateImageOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiGenerateImage": {
+      "post": {
+        "summary": "MultiGenerateImage",
+        "operationId": "MultiGenerateImage",
+        "tags": ["category:image"],
+        "description": "Generate multiple images.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiGenerateImageIn"
+              },
+              "example": {
+                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+                "num_images": 2,
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiGenerateImageOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg"
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/InpaintImage": {
+      "post": {
+        "summary": "InpaintImage",
+        "operationId": "InpaintImage",
+        "tags": ["category:image"],
+        "description": "Edit an image using image generation inside part of the image or the full image.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InpaintImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InpaintImageOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiInpaintImage": {
+      "post": {
+        "summary": "MultiInpaintImage",
+        "operationId": "MultiInpaintImage",
+        "tags": ["category:image"],
+        "description": "Edit multiple images using image generation.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiInpaintImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+                "num_images": 2,
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiInpaintImageOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg"
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableDiffusionXLLightning": {
+      "post": {
+        "summary": "StableDiffusionXLLightning",
+        "operationId": "StableDiffusionXLLightning",
+        "tags": ["category:image", "type:low-level"],
+        "description": "Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLLightningIn"
+              },
+              "example": {
+                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+                "negative_prompt": "night, moon",
+                "num_images": 2,
+                "seeds": [330699, 136464],
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLLightningOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 330418
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 1364164
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableDiffusionXLInpaint": {
+      "post": {
+        "summary": "StableDiffusionXLInpaint",
+        "operationId": "StableDiffusionXLInpaint",
+        "tags": ["category:image", "type:low-level"],
+        "description": "Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLInpaintIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "large tropical colorful bright birds in a jungle, high resolution oil painting",
+                "negative_prompt": "dark, cartoon, anime",
+                "strength": 0.8,
+                "num_images": 2,
+                "store": "hosted",
+                "seeds": [1607280, 1720395]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLInpaintOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 1607326
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 1720398
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableDiffusionXLControlNet": {
+      "post": {
+        "summary": "StableDiffusionXLControlNet",
+        "operationId": "StableDiffusionXLControlNet",
+        "tags": ["category:image"],
+        "description": "Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLControlNetIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
+                "control_method": "illusion",
+                "conditioning_scale": 1.0,
+                "strength": 1.0,
+                "store": "hosted",
+                "num_images": 2,
+                "seeds": [1607226, 1720395]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLControlNetOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 1607266
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 1720398
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableVideoDiffusion": {
+      "post": {
+        "summary": "StableVideoDiffusion",
+        "operationId": "StableVideoDiffusion",
+        "tags": ["category:image", "type:low-level"],
+        "description": "Generates a video using a still image as conditioning frame.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableVideoDiffusionIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableVideoDiffusionOut"
+                },
+                "example": {
+                  "video_uri": "https://assets.substrate.run/84848484.mp4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/InterpolateFrames": {
+      "post": {
+        "summary": "InterpolateFrames",
+        "operationId": "InterpolateFrames",
+        "tags": ["category:image", "type:low-level"],
+        "description": "Generates a interpolation frames between each adjacent frames.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InterpolateFramesIn"
+              },
+              "example": {
+                "frame_uris": [
+                  "https://media.substrate.run/apple-forest2.jpeg",
+                  "https://media.substrate.run/apple-forest3.jpeg"
+                ],
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterpolateFramesOut"
+                },
+                "example": {
+                  "video_uri": "https://assets.substrate.run/84848484.mp4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/TranscribeSpeech": {
+      "post": {
+        "summary": "TranscribeSpeech",
+        "operationId": "TranscribeSpeech",
+        "tags": ["category:audio"],
+        "description": "Transcribe speech in an audio or video file.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscribeSpeechIn"
+              },
+              "example": {
+                "audio_uri": "https://media.substrate.run/dfw-clip.m4a",
+                "prompt": "David Foster Wallace interviewed about US culture, and Infinite Jest",
+                "segment": true,
+                "align": true,
+                "diarize": true,
+                "suggest_chapters": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TranscribeSpeechOut"
+                },
+                "example": {
+                  "text": "language like that, the wounded inner child, the inner pain, is part of a kind of pop psychological movement in the United States that is a sort of popular Freudianism that ...",
+                  "segments": [
+                    {
+                      "start": 0.874,
+                      "end": 15.353,
+                      "speaker": "SPEAKER_00",
+                      "text": "language like that, the wounded inner child, the inner pain, is part of a kind of pop psychological movement in the United States that is a sort of popular Freudianism that",
+                      "words": [
+                        {
+                          "word": "language",
+                          "start": 0.874,
+                          "end": 1.275,
+                          "speaker": "SPEAKER_00"
+                        },
+                        {
+                          "word": "like",
+                          "start": 1.295,
+                          "end": 1.455,
+                          "speaker": "SPEAKER_00"
+                        }
+                      ]
+                    }
+                  ],
+                  "chapters": [
+                    {
+                      "title": "Introduction to the Wounded Inner Child and Popular Psychology in US",
+                      "start": 0.794
+                    },
+                    {
+                      "title": "The Paradox of Popular Psychology and Anger in America",
+                      "start": 16.186
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GenerateSpeech": {
+      "post": {
+        "summary": "GenerateSpeech",
+        "operationId": "GenerateSpeech",
+        "tags": ["category:audio", "backend:v1"],
+        "description": "Generate speech from text.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateSpeechIn"
+              },
+              "example": {
+                "text": "Substrate: an underlying substance or layer.",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechOut"
+                },
+                "example": {
+                  "audio_uri": "https://assets.substrate.run/84848484.wav"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/RemoveBackground": {
+      "post": {
+        "summary": "RemoveBackground",
+        "operationId": "RemoveBackground",
+        "tags": ["category:segmentation"],
+        "description": "Remove the background from an image and return the foreground segment as a cut-out or a mask.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveBackgroundIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveBackgroundOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EraseImage": {
+      "post": {
+        "summary": "EraseImage",
+        "operationId": "EraseImage",
+        "tags": ["category:image"],
+        "description": "Erase the masked part of an image, e.g. to remove an object by inpainting.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EraseImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+                "mask_image_uri": "https://media.substrate.run/apple-forest-mask.jpeg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EraseImageOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/UpscaleImage": {
+      "post": {
+        "summary": "UpscaleImage",
+        "operationId": "UpscaleImage",
+        "tags": ["category:image"],
+        "description": "Upscale an image using image generation.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpscaleImageIn"
+              },
+              "example": {
+                "prompt": "high resolution detailed spiral shell",
+                "image_uri": "https://media.substrate.run/docs-shell-emoji.jpg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpscaleImageOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SegmentUnderPoint": {
+      "post": {
+        "summary": "SegmentUnderPoint",
+        "operationId": "SegmentUnderPoint",
+        "tags": ["category:segmentation"],
+        "description": "Segment an image under a point and return the segment.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SegmentUnderPointIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+                "point": {
+                  "x": 189,
+                  "y": 537
+                },
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentUnderPointOut"
+                },
+                "example": {
+                  "mask_image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SegmentAnything": {
+      "post": {
+        "summary": "SegmentAnything",
+        "operationId": "SegmentAnything",
+        "tags": ["category:segmentation", "type:low-level"],
+        "description": "Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SegmentAnythingIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+                "point_prompts": [
+                  {
+                    "x": 189,
+                    "y": 537
+                  }
+                ],
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentAnythingOut"
+                },
+                "example": {
+                  "mask_image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SplitDocument": {
+      "post": {
+        "summary": "SplitDocument",
+        "operationId": "SplitDocument",
+        "tags": ["category:embedding"],
+        "description": "Split document into text segments.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SplitDocumentIn"
+              },
+              "example": {
+                "doc_id": "example_pdf",
+                "uri": "https://arxiv.org/pdf/2405.07945",
+                "metadata": {
+                  "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SplitDocumentOut"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "text": "This is the first chunk of the pdf",
+                      "metadata": {
+                        "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods",
+                        "chunk_id": "chk_asd897asdhnad0j8qd8qnd98"
+                      },
+                      "doc_id": "example_pdf"
+                    },
+                    {
+                      "text": "This is the second chunk of the pdf",
+                      "metadata": {
+                        "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods",
+                        "chunk_id": "chk_nvsiusd89adsy89dahd9abs8"
+                      },
+                      "doc_id": "example_pdf"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EmbedText": {
+      "post": {
+        "summary": "EmbedText",
+        "operationId": "EmbedText",
+        "tags": ["category:embedding"],
+        "description": "Generate embedding for a text document.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbedTextIn"
+              },
+              "example": {
+                "text": "Argon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
+                "model": "jina-v2",
+                "collection_name": "smoke_tests",
+                "metadata": {
+                  "group": "18"
+                },
+                "embedded_metadata_keys": ["group"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbedTextOut"
+                },
+                "example": {
+                  "embedding": {
+                    "vector": [
+                      -0.035030052065849304, -0.04128379374742508,
+                      0.05782046541571617
+                    ],
+                    "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                    "metadata": {
+                      "group": "18",
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                      "doc": "group: 18\n\nArgon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiEmbedText": {
+      "post": {
+        "summary": "MultiEmbedText",
+        "operationId": "MultiEmbedText",
+        "tags": ["category:embedding"],
+        "description": "Generate embeddings for multiple text documents.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiEmbedTextIn"
+              },
+              "example": {
+                "model": "jina-v2",
+                "items": [
+                  {
+                    "text": "Osmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+                    "metadata": {
+                      "group": "8"
+                    }
+                  },
+                  {
+                    "text": "Despite its abundant presence in the universe and Solar System—ranking fifth in cosmic abundance following hydrogen, helium, oxygen, and carbon—neon is comparatively scarce on Earth.",
+                    "metadata": {
+                      "group": "18"
+                    }
+                  }
+                ],
+                "collection_name": "smoke_tests",
+                "embedded_metadata_keys": ["group"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiEmbedTextOut"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                      "metadata": {
+                        "group": "8",
+                        "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                        "doc": "group: 8\n\nOsmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness."
+                      }
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4",
+                      "metadata": {
+                        "group": "18",
+                        "doc_id": "c4464f69c93946a896925589681d38b4",
+                        "doc": "group: 18\n\nDespite its abundant presence in the universe and Solar System—ranking fifth in cosmic abundance following hydrogen, helium, oxygen, and carbon—neon is comparatively scarce on Earth."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EmbedImage": {
+      "post": {
+        "summary": "EmbedImage",
+        "operationId": "EmbedImage",
+        "tags": ["category:embedding"],
+        "description": "Generate embedding for an image.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbedImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-fuji-red.jpg",
+                "collection_name": "smoke_tests"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbedImageOut"
+                },
+                "example": {
+                  "embedding": {
+                    "vector": [
+                      0.0003024724137503654, -0.025219274684786797,
+                      -0.009984994307160378
+                    ],
+                    "doc_id": "c4464f69c93946a896925589681d38b4"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiEmbedImage": {
+      "post": {
+        "summary": "MultiEmbedImage",
+        "operationId": "MultiEmbedImage",
+        "tags": ["category:embedding"],
+        "description": "Generate embeddings for multiple images.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiEmbedImageIn"
+              },
+              "example": {
+                "items": [
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+                  },
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+                  }
+                ],
+                "collection_name": "smoke_tests"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiEmbedImageOut"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b"
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/JinaV2": {
+      "post": {
+        "summary": "JinaV2",
+        "operationId": "JinaV2",
+        "tags": ["category:embedding", "type:low-level"],
+        "description": "Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JinaV2In"
+              },
+              "example": {
+                "items": [
+                  {
+                    "text": "Hassium is a superheavy element; it has been produced in a laboratory only in very small quantities by fusing heavy nuclei with lighter ones. Natural occurrences of the element have been hypothesised but never found.",
+                    "metadata": {
+                      "group": "8"
+                    }
+                  },
+                  {
+                    "text": "Xenon is also used to search for hypothetical weakly interacting massive particles and as a propellant for ion thrusters in spacecraft.",
+                    "metadata": {
+                      "group": "18"
+                    }
+                  }
+                ],
+                "collection_name": "smoke_tests",
+                "embedded_metadata_keys": ["group"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JinaV2Out"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                      "metadata": {
+                        "group": "8",
+                        "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                        "doc": "group: 8\n\nHassium is a superheavy element; it has been produced in a laboratory only in very small quantities by fusing heavy nuclei with lighter ones. Natural occurrences of the element have been hypothesised but never found."
+                      }
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4",
+                      "metadata": {
+                        "group": "18",
+                        "doc_id": "c4464f69c93946a896925589681d38b4",
+                        "doc": "group: 18\n\nXenon is also used to search for hypothetical weakly interacting massive particles and as a propellant for ion thrusters in spacecraft."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/CLIP": {
+      "post": {
+        "summary": "CLIP",
+        "operationId": "CLIP",
+        "tags": ["category:embedding", "type:low-level"],
+        "description": "Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CLIPIn"
+              },
+              "example": {
+                "items": [
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+                  },
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+                  }
+                ],
+                "collection_name": "smoke_tests"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CLIPOut"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b"
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/FindOrCreateVectorStore": {
+      "post": {
+        "tags": ["category:vector-store"],
+        "summary": "FindOrCreateVectorStore",
+        "operationId": "FindOrCreateVectorStore",
+        "description": "Find a vector store matching the given collection name, or create a new vector store.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindOrCreateVectorStoreIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Vector store created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindOrCreateVectorStoreOut"
+                },
+                "example": {
+                  "collection_name": "smoke_tests",
+                  "model": "jina-v2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ListVectorStores": {
+      "post": {
+        "tags": ["category:vector-store"],
+        "summary": "ListVectorStores",
+        "operationId": "ListVectorStores",
+        "description": "List all vector stores.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListVectorStoresIn"
+              },
+              "example": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of vector stores.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListVectorStoresOut"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "collection_name": "comments",
+                      "model": "jina-v2"
+                    },
+                    {
+                      "collection_name": "images",
+                      "model": "jina-v2"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DeleteVectorStore": {
+      "post": {
+        "tags": ["category:vector-store"],
+        "summary": "DeleteVectorStore",
+        "operationId": "DeleteVectorStore",
+        "description": "Delete a vector store.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteVectorStoreIn"
+              },
+              "example": {
+                "collection_name": "fake_store",
+                "model": "jina-v2"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteVectorStoreOut"
+                },
+                "example": {
+                  "collection_name": "comments",
+                  "model": "jina-v2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/QueryVectorStore": {
+      "post": {
+        "tags": ["category:vector-store"],
+        "summary": "QueryVectorStore",
+        "operationId": "QueryVectorStore",
+        "description": "Query a vector store for similar vectors.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryVectorStoreIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "query_strings": ["gas", "metal"],
+                "top_k": 1,
+                "include_metadata": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Query results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryVectorStoreOut"
+                },
+                "example": {
+                  "results": [
+                    [
+                      {
+                        "id": "483e75021c9d4ad69c3d78ace76da2ea",
+                        "distance": -0.78324556350708,
+                        "metadata": {
+                          "doc": "group: 18\n\nArgon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
+                          "group": "18",
+                          "doc_id": "483e75021c9d4ad69c3d78ace76da2ea"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+                        "distance": -0.74278724193573,
+                        "metadata": {
+                          "doc": "group: 8\n\nOsmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+                          "group": "8",
+                          "doc_id": "dd8f3774e05d42caa53cfbaa7389c08f"
+                        }
+                      }
+                    ]
+                  ],
+                  "collection_name": "comments",
+                  "model": "jina-v2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/FetchVectors": {
+      "post": {
+        "tags": ["category:vector-store"],
+        "summary": "FetchVectors",
+        "operationId": "FetchVectors",
+        "description": "Fetch vectors from a vector store.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchVectorsIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "ids": ["dd8f3774e05d42caa53cfbaa7389c08f"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Vector data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FetchVectorsOut"
+                },
+                "example": {
+                  "vectors": [
+                    {
+                      "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+                      "vector": [0.036658343, -0.0066040196, 0.028221145],
+                      "metadata": {
+                        "doc": "group: 8\n\nOsmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+                        "group": "8",
+                        "doc_id": "dd8f3774e05d42caa53cfbaa7389c08f"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/UpdateVectors": {
+      "post": {
+        "tags": ["category:vector-store"],
+        "summary": "UpdateVectors",
+        "operationId": "UpdateVectors",
+        "description": "Update vectors in a vector store.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVectorsIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "vectors": [
+                  {
+                    "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+                    "metadata": {
+                      "appearance": "silvery, blue cast"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Count of updated vectors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateVectorsOut"
+                },
+                "example": {
+                  "count": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DeleteVectors": {
+      "post": {
+        "tags": ["category:vector-store"],
+        "summary": "DeleteVectors",
+        "operationId": "DeleteVectors",
+        "description": "Delete vectors in a vector store.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteVectorsIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "ids": [
+                  "ac32b9a133dd4e3689004f6e8f0fd6cd",
+                  "629df177c7644062a68bceeff223cefa"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Count of deleted vectors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteVectorsOut"
+                },
+                "example": {
+                  "count": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

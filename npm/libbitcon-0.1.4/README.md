@@ -1,0 +1,4 @@
+libbitcoin
+==========
+
+nodejs bitcoin library

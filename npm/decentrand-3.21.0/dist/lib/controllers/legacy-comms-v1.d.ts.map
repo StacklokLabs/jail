@@ -1,0 +1,1 @@
+{"version":3,"file":"legacy-comms-v1.d.ts","sourceRoot":"","sources":["../../../src/lib/controllers/legacy-comms-v1.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,oCAAoC,CAAA;AAC3D,OAAO,SAAS,MAAM,IAAI,CAAA;AAC1B,OAAO,EAAE,iBAAiB,EAAE,MAAM,YAAY,CAAA;AAI9C,wBAAgB,YAAY,CAAC,WAAW,EAAE,iBAAiB,EAAE,OAAO,EAAE,MAAM,CAAC,GAAG,CAAC;uBAiB1D,SAAS,UAAU,MAAM;EAsF/C"}

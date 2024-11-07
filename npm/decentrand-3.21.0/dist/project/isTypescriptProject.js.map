@@ -1,0 +1,1 @@
+{"version":3,"file":"isTypescriptProject.js","sourceRoot":"","sources":["../../src/project/isTypescriptProject.ts"],"names":[],"mappings":";;;;;;AAAA,gDAAuB;AACvB,wDAAyB;AAElB,KAAK,UAAU,mBAAmB,CAAC,WAAmB;IAC3D,MAAM,YAAY,GAAG,cAAI,CAAC,OAAO,CAAC,WAAW,EAAE,eAAe,CAAC,CAAA;IAC/D,OAAO,kBAAE,CAAC,UAAU,CAAC,YAAY,CAAC,CAAA;AACpC,CAAC;AAHD,kDAGC"}

