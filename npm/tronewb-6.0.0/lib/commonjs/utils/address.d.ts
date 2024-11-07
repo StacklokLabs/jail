@@ -1,0 +1,12 @@
+export declare const ADDRESS_SIZE = 34;
+export declare const ADDRESS_PREFIX = "41";
+export declare const ADDRESS_PREFIX_BYTE = 65;
+export declare const ADDRESS_PREFIX_REGEX: RegExp;
+export declare const TRON_BIP39_PATH_PREFIX = "m/44'/195'";
+export declare const TRON_BIP39_PATH_INDEX_0: string;
+export declare function fromHex(address: string): string;
+export declare function toHex(address: string): string;
+export declare function toChecksumAddress(address: string): string;
+export declare function isChecksumAddress(address: string): boolean;
+export declare function fromPrivateKey(privateKey: string, strict?: boolean): string | false;
+export declare function isAddress(address: unknown): boolean;

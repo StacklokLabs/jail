@@ -1,0 +1,22 @@
+import { AbiParamsCommon } from '../types/ABI.js';
+import { IBigNumber } from '../types/TronWeb.js';
+import type { EventQueryDataType, MapEventQueryDataType } from '../types/UtilsTypes.js';
+export declare function isValidURL(url: string): boolean;
+export declare function isObject(obj: unknown): obj is Record<number | string | symbol, unknown>;
+export declare function isArray(array: unknown): array is unknown[];
+export declare function isJson(string: string): boolean;
+export declare function isBoolean(bool: unknown): bool is boolean;
+export declare function isBigNumber(number: unknown): number is IBigNumber;
+export declare function isString(string: unknown): string is string;
+export declare function isFunction(obj: unknown): obj is (...args: unknown[]) => unknown;
+export declare function isHex(string: string): string is string;
+export declare function isInteger(number: unknown): number is number;
+export declare function hasProperty(obj: object, property: string | number | symbol): boolean;
+export declare function hasProperties(obj: object, ...properties: (string | number | symbol)[]): boolean | 0;
+export declare function mapEvent(event: EventQueryDataType): MapEventQueryDataType;
+export declare function parseEvent(event: EventQueryDataType, { inputs: abi }: {
+    inputs: ReadonlyArray<AbiParamsCommon>;
+}): EventQueryDataType;
+export declare function padLeft(input: string | number, padding: string, amount: number): string;
+export declare function isNotNullOrUndefined(val: unknown): boolean;
+export declare function sleep(millis?: number): Promise<any>;

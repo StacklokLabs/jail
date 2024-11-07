@@ -1,0 +1,17 @@
+import '../protocol/core/Tron_pb.cjs';
+import '../protocol/core/contract/balance_contract_pb.cjs';
+import '../protocol/core/contract/asset_issue_contract_pb.cjs';
+import '../protocol/core/contract/smart_contract_pb.cjs';
+import '../protocol/core/contract/common_pb.cjs';
+import '../protocol/core/contract/witness_contract_pb.cjs';
+import '../protocol/core/contract/storage_contract_pb.cjs';
+import '../protocol/core/contract/account_contract_pb.cjs';
+import '../protocol/core/contract/proposal_contract_pb.cjs';
+import '../protocol/core/contract/exchange_contract_pb.cjs';
+declare const txJsonToPb: (transaction: any) => any;
+declare const txJsonToPbWithArgs: (transaction: any, args?: any, options?: any) => any;
+declare const txPbToRawDataHex: (pb: any) => string;
+declare const txCheck: (transaction: any) => boolean;
+declare const txCheckWithArgs: (transaction: any, args: any, options: any) => boolean;
+declare const txPbToTxID: (transactionPb: any) => string;
+export { txJsonToPb, txPbToTxID, txPbToRawDataHex, txJsonToPbWithArgs, txCheckWithArgs, txCheck };

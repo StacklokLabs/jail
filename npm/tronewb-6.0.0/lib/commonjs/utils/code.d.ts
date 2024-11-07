@@ -1,0 +1,12 @@
+import { byte2hexStr, bytesToString, hextoString, byteArray2hexStr, base64DecodeFromString, base64EncodeToString } from './bytes.js';
+import type { BytesLike } from '../types/UtilsTypes.js';
+export declare function bin2String(array: BytesLike): string;
+export declare function arrayEquals(array1: any[], array2: any[], strict?: boolean): boolean;
+export declare function stringToBytes(str: string): number[];
+export { byte2hexStr, bytesToString, hextoString, byteArray2hexStr, base64DecodeFromString, base64EncodeToString };
+export declare function hexChar2byte(c: string): number;
+export declare function isHexChar(c: string): 0 | 1;
+export declare function hexStr2byteArray(str: string, strict?: boolean): number[];
+export declare function strToDate(str: string): Date;
+export declare function isNumber(c: string): 0 | 1;
+export declare function getStringType(str: string): 2 | 3 | 1 | -1;
