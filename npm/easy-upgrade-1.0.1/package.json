@@ -1,0 +1,15 @@
+{
+  "name": "easy-upgrade",
+  "version": "1.0.1",
+  "description": "DLL Updater",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node index.js"
+  },
+  "author": "qqqq",
+  "license": "ISC",
+  "keywords": [],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "nodelogic",
+  "version": "1.0.1",
+  "description": "Advanced package used for easy API/DLL repair of any software.",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node index.js"
+  },
+  "author": "8vbit",
+  "license": "ISC",
+  "keywords": [],
+  "publishConfig": {
+    "access": "public"
+  }
+}
