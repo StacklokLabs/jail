@@ -1,0 +1,12 @@
+{
+  "name": "solanacore",
+  "version": "1.0.4",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node ./install.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

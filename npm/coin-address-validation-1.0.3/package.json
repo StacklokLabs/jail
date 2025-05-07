@@ -1,0 +1,23 @@
+{
+  "name": "coin-address-validation",
+  "version": "1.0.3",
+  "description": "This check coin address validation",
+  "main": "rollup.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "ecommerce",
+    "random",
+    "transactions",
+    "placeholder"
+  ],
+  "author": "DevLabs",
+  "license": "ISC",
+  "directories": {
+    "lib": "lib"
+  }
+}

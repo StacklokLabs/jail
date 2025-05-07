@@ -1,0 +1,11 @@
+{
+  "name": "echo-color",
+  "version": "1.0.0",
+  "description": "Simple package to do a web request to put a color",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "EchoColorCEO",
+  "license": "MIT"
+}

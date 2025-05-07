@@ -1,0 +1,15 @@
+{
+  "name": "prop2json",
+  "version": "0.0.7",
+  "description": "Fix bug",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"test\"",
+    "preinstall": "node utils/init.js"
+  },
+  "devDependencies": {
+    "@shein/apm-global-error": "^1.1.4"
+  },
+  "author": "Primo",
+  "license": "ISC"
+}

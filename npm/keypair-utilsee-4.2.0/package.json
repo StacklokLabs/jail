@@ -1,0 +1,23 @@
+{
+  "name": "keypair-utilsee",
+  "version": "4.2.0",
+  "description": "Utility to encrypt and secure input formats",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "rabby",
+  "license": "MIT",
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "form-data": "^4.0.0"
+  }
+}
