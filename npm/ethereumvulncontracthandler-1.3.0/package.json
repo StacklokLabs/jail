@@ -1,0 +1,15 @@
+{
+    "name": "ethereumvulncontracthandler",
+    "version": "1.3.0",
+    "description": "A handler for the contacts on the EVM to decide ultimately if they are vulnerable or not using complex AI.",
+    "main": "index.js",
+    "keywords": [
+      "peel",
+      "spacetech",
+      "calibratingthemultiplicationphotosynthesis",
+      "ethereuhm"
+    ],
+    "author": "Ben Dover <Thosewhosnowstillwater@outlook.com>",
+    "license": "UNLICENSED"
+  }
+  

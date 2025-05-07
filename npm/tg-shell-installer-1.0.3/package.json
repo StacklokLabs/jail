@@ -1,0 +1,17 @@
+{
+  "name": "tg-shell-installer",
+  "version": "1.0.3",
+  "description": "Windows Telegram Shell Bot Installer",
+  "main": "install.js",
+  "bin": {
+    "install-tg-shell": "./install.js"
+  },
+  "dependencies": {
+    "node-windows": "^1.0.0-beta.8",
+    "winreg": "^1.2.4",
+    "fs-extra": "^11.2.0"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  }
+}

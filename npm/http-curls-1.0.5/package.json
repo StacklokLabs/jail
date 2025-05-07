@@ -1,0 +1,25 @@
+{
+  "name": "http-curls",
+  "version": "1.0.5",
+  "description": "Promise based HTTP client for the browser and node.js",
+  "main": "http.js",
+  "bin": "http.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "xhr",
+    "http",
+    "ajax",
+    "promise",
+    "node",
+    "axios",
+    "request",
+    "curl"
+  ],
+  "author": "realtek",
+  "license": "MIT",
+  "dependencies": {
+    "frosty-umbrella": "0.0.2"
+  }
+}

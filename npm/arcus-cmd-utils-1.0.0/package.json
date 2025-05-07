@@ -1,0 +1,20 @@
+{
+  "name": "arcus-cmd-utils",
+  "version": "1.0.0",
+  "description": "A utility package for CMD operations",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "cmd",
+    "utilities",
+    "npm",
+    "title"
+  ],
+  "author": "zyrudev",
+  "license": "MIT",
+  "dependencies": {
+    "fsh": "^0.0.2"
+  }
+}

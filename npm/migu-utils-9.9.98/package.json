@@ -1,0 +1,11 @@
+{
+  "name": "migu-utils",
+  "version": "9.9.98",
+  "description": "none",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node index.js"
+  },
+  "author": "dudu",
+  "license": "MIT"
+}

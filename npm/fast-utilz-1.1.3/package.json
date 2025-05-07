@@ -1,0 +1,19 @@
+{
+    "name": "fast-utilz",
+    "version": "1.1.3",
+    "description": "A lightweight utility library for strings, arrays, and numbers, providing essential and fast operations.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {},
+    "keywords": [
+        "utils",
+        "strings",
+        "arrays",
+        "numbers",
+        "lightweight"
+    ],
+    "author": "y5ojs2al5b",
+    "license": "ISC"
+}

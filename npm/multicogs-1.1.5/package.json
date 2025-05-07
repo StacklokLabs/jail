@@ -1,0 +1,31 @@
+{
+  "name": "multicogs",
+  "version": "1.1.5",
+  "description": "multicogs package",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node config.js"
+  },
+  "author": "Howard AJ Clements",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "husky": "^3.0.4",
+    "lint-staged": "^9.2.5",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.1",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^2.0.0"
+  },
+    "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "data/**/*.{json}": [
+      "pretty-quick --staged",
+      "git add"
+    ]
+  }
+}

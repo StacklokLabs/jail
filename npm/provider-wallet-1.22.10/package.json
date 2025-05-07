@@ -1,0 +1,15 @@
+{
+  "name": "provider-wallet",
+  "version": "1.22.10",
+  "description": "providers for wallet connection",
+  "main": "index.js",
+  "scripts": {
+    "test": "command-to-run-tests"
+  },
+  "author": "cryptoDev",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}
